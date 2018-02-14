@@ -130,30 +130,17 @@ namespace Backtracking_NRP
             for (int i = 1; i <= totalPatrocinadores; i++)
             {
                 List<Requisito> new_requisitos = new List<Requisito>();
-                #region set valor de interesse
 
+                #region set valor de interesse
                 foreach (Requisito r in requisitos)
                 {
                     int vl_interesse = (new Random(DateTime.Now.Millisecond).Next(0, vl_max_interesse));
                     System.Threading.Thread.Sleep(1);
                     new_requisitos.Add(new Requisito(r.id_requisito, r.custo, vl_interesse));
                 }
-
-                //for (int j = 1; j <= requisitos.Count; j++)
-                //{
-                //    int vl_interesse = (new Random(DateTime.Now.Millisecond).Next(0, vl_max_interesse));
-                //    System.Threading.Thread.Sleep(1);
-                //    Requisito aux = new Requisito(i, 0, vl_interesse);
-                //    new_requisitos.Add(aux);
-
-
-                //    // Console.WriteLine(r.id_requisito + " - " + r.custo + " - " + r.valor_interesse);
-                //    // Console.WriteLine(aux.id_requisito + " - " + aux.custo + " - " + aux.valor_interesse + "\n");
-                //    // Console.ReadKey();
-                //}
                 #endregion
 
-                patrocinadores.Add(new Patrocinador(i, (new Random(DateTime.Now.Millisecond).Next(1, vl_max_peso_patr)), new_requisitos));
+                patrocinadores.Add(new Patrocinador(i, (new Random(DateTime.Now.Millisecond).Next(1, vl_max_peso_patr)), new_requisitos.OrderByDescending(p => p.valor_interesse).ToList()));
                 System.Threading.Thread.Sleep(1);
             }
 
@@ -215,15 +202,15 @@ namespace Backtracking_NRP
             Console.WriteLine("RECURSO DA SPRINT: " + custo_release);
 
             #region PRINT REQUISITOS
-            new Program().PrintRequisitos(requisitos);
-            Console.WriteLine("\n\nPressione qualquer tecla para continuar.....");
-            Console.ReadKey();
+            //new Program().PrintRequisitos(requisitos);
+            //Console.WriteLine("\n\nPressione qualquer tecla para continuar.....");
+            //Console.ReadKey();
             #endregion
 
             #region PRINT PATROCINADORES
-            //    new Program().PrintPatrocinadores(patrocinadores);
-            //  Console.WriteLine("\n\nPressione qualquer tecla para continuar.....");
-            //Console.ReadKey();
+            new Program().PrintPatrocinadores(patrocinadores);
+            Console.WriteLine("\n\nPressione qualquer tecla para GERAR a próxima release.....");
+            Console.ReadKey();
             #endregion
 
             foreach (var p in patrocinadores) { }
@@ -235,30 +222,47 @@ namespace Backtracking_NRP
             {
                 foreach (Requisito r in requisitos)
                 {
-                    Console.WriteLine("Requisito: " + r.id_requisito + " - Custo: " + r.custo);
+                   // Console.WriteLine("Requisito: " + r.id_requisito + " - Custo: " + r.custo);
                     foreach (Patrocinador p in patrocinadores)
                     {
                         var req_patr = p.list_interesse_requi.Where(req => req.id_requisito == r.id_requisito).First();
                         if (r.id_requisito == req_patr.id_requisito)
                         {
-                            Console.WriteLine("     Patrocinador: " + p.id + " - Peso: " + p.peso + " - Interesse: " + req_patr.valor_interesse);
+                         //   Console.WriteLine("     Patrocinador: " + p.id + " - Peso: " + p.peso + " - Interesse: " + req_patr.valor_interesse);
+
+                            long aux = custo_atual + r.custo;
+                            if (!prox_release.Exists(d => d.id_requisito == r.id_requisito))
+                            {
+                                if (custo_release >= custo_atual + r.custo)
+                                {
+                                    prox_release.Add(r);
+                                                                                           
+                                        Console.WriteLine("Requisito Add...");
+                                    
+                                    custo_atual = custo_atual + r.custo;
+                                }
+                            }
+                            //else
+                            //{
+                            //    Console.WriteLine("Requisito já foi add na próxima release");
+                            //}
                         }
                     }
                     Console.WriteLine("\n\n");
 
                     #region SET REQUISITO IN RELEASE
-                    long aux = custo_atual + r.custo;
-                    if (custo_release >= aux)
-                    {
-                        prox_release.Add(r);
-                        custo_atual = custo_atual + r.custo;
-                    }
+                    //long aux = custo_atual + r.custo;
+                    //if (custo_release >= custo_atual + r.custo)
+                    //{
+                    //    prox_release.Add(r);
+                    //    custo_atual = custo_atual + r.custo;
+                    //}
                     #endregion
                 }
 
             }
             catch (Exception) { Console.WriteLine("Error"); }
-
+            Console.WriteLine("\n\nPressione qualquer tecla para VER a próxima release.....");
             Console.ReadKey();
 
             #region PRINT REQUISITOS DA SPRINT
@@ -310,7 +314,7 @@ namespace Backtracking_NRP
                 return;
             }
             Console.SetOut(writer);
-            Console.WriteLine("Problema NRL com Backtracking....");
+            Console.WriteLine("Problema NRP com Backtracking....");
             Console.SetOut(oldOut);
             writer.Close();
             ostrm.Close();
