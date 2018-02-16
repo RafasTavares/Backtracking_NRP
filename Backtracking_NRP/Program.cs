@@ -14,6 +14,8 @@ namespace Backtracking_NRP
         public long custo { get; set; }
         public long valor_interesse { get; set; }
 
+        //public List<Requisito> dependentes { get; set; }
+
         public Requisito(long id, long custo, long interesse = 0)
         {
             this.id_requisito = id;
@@ -153,7 +155,7 @@ namespace Backtracking_NRP
         {
             Console.WriteLine("     REQUISITOS");
             foreach (Requisito r in requisitos)
-                Console.WriteLine("         Id: " + r.id_requisito + " - Custo: " + r.custo + " - Valor de interesse: " + r.valor_interesse);
+                Console.WriteLine("         Id: " + r.id_requisito + " - Custo: " + r.custo + ((r.valor_interesse > 0) ? " - Valor de interesse: " + r.valor_interesse : ""));
         }
         #endregion
 
@@ -213,64 +215,29 @@ namespace Backtracking_NRP
             Console.ReadKey();
             #endregion
 
-            foreach (var p in patrocinadores) { }
 
-            long custo_atual = 0;
+            //   List<Requisito> prox_release = 
+            new Program().Backtracking(custo_release, requisitos, patrocinadores);
 
-            List<Requisito> prox_release = new List<Requisito>();
-            try
-            {
-                foreach (Requisito r in requisitos)
-                {
-                   // Console.WriteLine("Requisito: " + r.id_requisito + " - Custo: " + r.custo);
-                    foreach (Patrocinador p in patrocinadores)
-                    {
-                        var req_patr = p.list_interesse_requi.Where(req => req.id_requisito == r.id_requisito).First();
-                        if (r.id_requisito == req_patr.id_requisito)
-                        {
-                         //   Console.WriteLine("     Patrocinador: " + p.id + " - Peso: " + p.peso + " - Interesse: " + req_patr.valor_interesse);
 
-                            long aux = custo_atual + r.custo;
-                            if (!prox_release.Exists(d => d.id_requisito == r.id_requisito))
-                            {
-                                if (custo_release >= custo_atual + r.custo)
-                                {
-                                    prox_release.Add(r);
-                                                                                           
-                                        Console.WriteLine("Requisito Add...");
-                                    
-                                    custo_atual = custo_atual + r.custo;
-                                }
-                            }
-                            //else
-                            //{
-                            //    Console.WriteLine("Requisito já foi add na próxima release");
-                            //}
-                        }
-                    }
-                    Console.WriteLine("\n\n");
 
-                    #region SET REQUISITO IN RELEASE
-                    //long aux = custo_atual + r.custo;
-                    //if (custo_release >= custo_atual + r.custo)
-                    //{
-                    //    prox_release.Add(r);
-                    //    custo_atual = custo_atual + r.custo;
-                    //}
-                    #endregion
-                }
+            #region SET REQUISITO IN RELEASE
+            //long custo_atual = 0;
+            //foreach (Requisito r in prox_release)
+            //{
+            //    custo_atual = custo_atual + r.custo;
+            //}
+            #endregion
 
-            }
-            catch (Exception) { Console.WriteLine("Error"); }
             Console.WriteLine("\n\nPressione qualquer tecla para VER a próxima release.....");
             Console.ReadKey();
 
             #region PRINT REQUISITOS DA SPRINT
-            Console.WriteLine("\n\n---------------------------------------------");
-            Console.WriteLine("RECURSO DA SPRINT: " + custo_release + " / CONSUMIDO: " + custo_atual);
-            Console.WriteLine("---------------------------------------------");
-            Console.WriteLine("REQUISITOS PARA PRÓXIMA RELEASE");
-            new Program().PrintRequisitos(prox_release);
+            //Console.WriteLine("\n\n---------------------------------------------");
+            //Console.WriteLine("RECURSO DA SPRINT: " + custo_release + " Custo atual: " + custo_atual);
+            //Console.WriteLine("---------------------------------------------");
+            //Console.WriteLine("REQUISITOS PARA PRÓXIMA RELEASE");
+            //new Program().PrintRequisitos(prox_release);
             #endregion
 
             #region SAVE CONSOLE
@@ -293,6 +260,46 @@ namespace Backtracking_NRP
             Console.WriteLine("\n\nPressione qualquer tecla para Finalizar.....");
             Console.ReadKey();
             #endregion
+        }
+        #endregion
+
+        #region Backtracking
+        public void Backtracking(long custo_release, List<Requisito> requisitos, List<Patrocinador> patrocinadores)
+        {
+            long custo_atual = 0;
+
+            try
+            {
+                foreach (Requisito r in requisitos)
+                {
+                    foreach (Patrocinador p in patrocinadores)
+                    {
+                        var req_patr = p.list_interesse_requi.Where(req => req.id_requisito == r.id_requisito).First();
+
+                        if (r.id_requisito == req_patr.id_requisito)
+                        {
+                            long aux = custo_atual + r.custo;
+
+                            if (custo_release >= custo_atual + r.custo)
+                            {
+                                requisitos.Remove(r);
+                                custo_atual = custo_atual + r.custo;
+                                Console.WriteLine(r.id_requisito + " - ");
+                                Backtracking(custo_release - custo_atual, requisitos, patrocinadores);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { Console.WriteLine("Error"); }
+        }
+        #endregion
+
+        #region Backtracking
+        public void ProcessaSolucao()
+        {
+
         }
         #endregion
 
