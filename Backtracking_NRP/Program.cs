@@ -229,6 +229,7 @@ namespace Backtracking_NRP
             //}
             #endregion
 
+
             Console.WriteLine("\n\nPressione qualquer tecla para VER a próxima release.....");
             Console.ReadKey();
 
@@ -264,44 +265,88 @@ namespace Backtracking_NRP
         #endregion
 
         #region Backtracking
-        public void Backtracking(long custo_release, List<Requisito> requisitos, List<Patrocinador> patrocinadores)
+        public string Backtracking(long custo_release, List<Requisito> requisitos, List<Patrocinador> patrocinadores)
         {
             long custo_atual = 0;
-
+            Requisito r = null;
             try
             {
-                foreach (Requisito r in requisitos)
+                if (custo_release >= custo_atual)
                 {
-                    foreach (Patrocinador p in patrocinadores)
+                    foreach (Requisito release in requisitos)
                     {
-                        var req_patr = p.list_interesse_requi.Where(req => req.id_requisito == r.id_requisito).First();
-
-                        if (r.id_requisito == req_patr.id_requisito)
+                        foreach (Patrocinador p in patrocinadores)
                         {
+                            #region Patrocinadores sem o atual
+                            List<Patrocinador> patrocinadores_sem_atual = patrocinadores.ToList();
+                            patrocinadores_sem_atual.Remove(p);
+                            #endregion
+
+                            foreach (Patrocinador p2 in patrocinadores_sem_atual)
+                            {
+                                if (p.list_interesse_requi.Count > 0 && p.list_interesse_requi.Count > 0)
+                                {
+                                    // Processa a solução, ou seja, retorna o requisito de maior prioridade
+                                    r = new Program().ProcessaSolucao(p, p2);
+
+
+                                    // Remove o requisito que já foi atribuido a release das listas do patrocinador
+                                    p.list_interesse_requi.RemoveAll(x => x.id_requisito == r.id_requisito);
+                                    p2.list_interesse_requi.RemoveAll(x => x.id_requisito == r.id_requisito);
+                                }
+                                else { break; }
+                            }
+
                             long aux = custo_atual + r.custo;
 
                             if (custo_release >= custo_atual + r.custo)
                             {
-                                requisitos.Remove(r);
+                                //     requisitos.Remove(r);
                                 custo_atual = custo_atual + r.custo;
-                                Console.WriteLine(r.id_requisito + " - ");
-                                Backtracking(custo_release - custo_atual, requisitos, patrocinadores);
-                                break;
+                                // É "impresso" o requisito de retorno do backtraking, e realiza uma chamada recussiva para o 
+                                // próprio método passando os parametros sem o requisito que já está na release
+                                Console.Write(Backtracking(custo_release - custo_atual, requisitos, patrocinadores));
+                                return r.id_requisito.ToString();
+                                //  break;
+
                             }
                         }
                     }
                 }
+                return null;
             }
-            catch (Exception ex) { Console.WriteLine("Error"); }
+            catch (Exception ex)
+            {
+                return null;
+                Console.WriteLine("Error");
+            }
         }
         #endregion
 
-        #region Backtracking
-        public void ProcessaSolucao()
+        #region ProcessaSolucao
+        public Requisito ProcessaSolucao(Patrocinador p, Patrocinador p2)
         {
+            // Se existir um requisito de um patrocinador com mesmo peso ou menor, mas com interesse maior, retorna esse requitio
+            return (p.list_interesse_requi.Max(m => m.valor_interesse) >= p2.list_interesse_requi.Max(m => m.valor_interesse))
+               ? p.list_interesse_requi.FirstOrDefault() : p2.list_interesse_requi.FirstOrDefault();
+
 
         }
         #endregion
+
+
+
+        static int Fibonacci(int x) // A variável ‘x’ assume o valor da varíável ‘number’
+        {
+            // Aqui a lógica é simples, se ‘x’ for menor ou igual a 1 o valor 1 será retornado
+            if (x <= 1)
+            {
+                return 1;
+            }
+            // Aqui a recursividade é usada para "buscar" o termo que foi inserido na variável ‘number’ e que foi atribuida por ‘x’
+            // O método Fibonacci será executado até que o termo solicitado seja alcançado
+            return Fibonacci(x - 1) + Fibonacci(x - 2);
+        }
 
         #region SaveConsoleInTxt
         public void SaveConsoleInTxt()
