@@ -216,10 +216,8 @@ namespace Backtracking_NRP
             #endregion
 
 
-            //   List<Requisito> prox_release = 
+            //List<Requisito> prox_release = 
             new Program().Backtracking(custo_release, requisitos, patrocinadores);
-
-
 
             #region SET REQUISITO IN RELEASE
             //long custo_atual = 0;
@@ -229,9 +227,8 @@ namespace Backtracking_NRP
             //}
             #endregion
 
-
-            Console.WriteLine("\n\nPressione qualquer tecla para VER a próxima release.....");
-            Console.ReadKey();
+            //Console.WriteLine("\n\nPressione qualquer tecla para VER a próxima release.....");
+            //Console.ReadKey();
 
             #region PRINT REQUISITOS DA SPRINT
             //Console.WriteLine("\n\n---------------------------------------------");
@@ -288,8 +285,7 @@ namespace Backtracking_NRP
                                 {
                                     // Processa a solução, ou seja, retorna o requisito de maior prioridade
                                     r = new Program().ProcessaSolucao(p, p2);
-
-
+                                    
                                     // Remove o requisito que já foi atribuido a release das listas do patrocinador
                                     p.list_interesse_requi.RemoveAll(x => x.id_requisito == r.id_requisito);
                                     p2.list_interesse_requi.RemoveAll(x => x.id_requisito == r.id_requisito);
@@ -297,18 +293,16 @@ namespace Backtracking_NRP
                                 else { break; }
                             }
 
-                            long aux = custo_atual + r.custo;
-
                             if (custo_release >= custo_atual + r.custo)
                             {
-                                //     requisitos.Remove(r);
+                                // calcula o custo dos requisitos que já estão na release com o que esta sendo adicionado agora
                                 custo_atual = custo_atual + r.custo;
+
                                 // É "impresso" o requisito de retorno do backtraking, e realiza uma chamada recussiva para o 
                                 // próprio método passando os parametros sem o requisito que já está na release
                                 Console.Write(Backtracking(custo_release - custo_atual, requisitos, patrocinadores));
-                                return r.id_requisito.ToString();
-                                //  break;
 
+                                return r.id_requisito.ToString();
                             }
                         }
                     }
