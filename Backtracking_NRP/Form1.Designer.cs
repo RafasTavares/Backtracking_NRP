@@ -38,13 +38,15 @@
             this.pnlGerarDados = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtQtdRequisitos = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtQtdPatrocinadores = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtQtdRelease = new System.Windows.Forms.TextBox();
             this.pnlGerarDados.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -55,6 +57,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Gerar dados";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // txtCustoRequisito
             // 
@@ -108,11 +111,11 @@
             // 
             this.pnlGerarDados.Controls.Add(this.label1);
             this.pnlGerarDados.Controls.Add(this.label2);
-            this.pnlGerarDados.Controls.Add(this.textBox1);
+            this.pnlGerarDados.Controls.Add(this.txtQtdRelease);
             this.pnlGerarDados.Controls.Add(this.label3);
-            this.pnlGerarDados.Controls.Add(this.textBox2);
+            this.pnlGerarDados.Controls.Add(this.txtQtdRequisitos);
             this.pnlGerarDados.Controls.Add(this.label4);
-            this.pnlGerarDados.Controls.Add(this.textBox3);
+            this.pnlGerarDados.Controls.Add(this.txtQtdPatrocinadores);
             this.pnlGerarDados.Controls.Add(this.custoRequisito);
             this.pnlGerarDados.Controls.Add(this.button1);
             this.pnlGerarDados.Controls.Add(this.txtPesoPatrocinador);
@@ -144,13 +147,6 @@
             this.label2.TabIndex = 10;
             this.label2.Text = "Qtd. Patrocinadores:";
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(500, 122);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(53, 22);
-            this.textBox1.TabIndex = 9;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -160,12 +156,12 @@
             this.label3.TabIndex = 12;
             this.label3.Text = "Custo max. release:";
             // 
-            // textBox2
+            // txtQtdRequisitos
             // 
-            this.textBox2.Location = new System.Drawing.Point(500, 86);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(53, 22);
-            this.textBox2.TabIndex = 8;
+            this.txtQtdRequisitos.Location = new System.Drawing.Point(500, 86);
+            this.txtQtdRequisitos.Name = "txtQtdRequisitos";
+            this.txtQtdRequisitos.Size = new System.Drawing.Size(53, 22);
+            this.txtQtdRequisitos.TabIndex = 8;
             // 
             // label4
             // 
@@ -176,19 +172,37 @@
             this.label4.TabIndex = 11;
             this.label4.Text = "Qtd. Requisítos:";
             // 
-            // textBox3
+            // txtQtdPatrocinadores
             // 
-            this.textBox3.Location = new System.Drawing.Point(500, 48);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(53, 22);
-            this.textBox3.TabIndex = 7;
+            this.txtQtdPatrocinadores.Location = new System.Drawing.Point(500, 48);
+            this.txtQtdPatrocinadores.Name = "txtQtdPatrocinadores";
+            this.txtQtdPatrocinadores.Size = new System.Drawing.Size(53, 22);
+            this.txtQtdPatrocinadores.TabIndex = 7;
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label5);
             this.panel1.Location = new System.Drawing.Point(13, 222);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(839, 163);
             this.panel1.TabIndex = 8;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(164, 3);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(493, 20);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Informe os dados para geração automática dos requisítos";
+            // 
+            // txtQtdRelease
+            // 
+            this.txtQtdRelease.Location = new System.Drawing.Point(500, 122);
+            this.txtQtdRelease.Name = "txtQtdRelease";
+            this.txtQtdRelease.Size = new System.Drawing.Size(53, 22);
+            this.txtQtdRelease.TabIndex = 9;
             // 
             // Form1
             // 
@@ -202,6 +216,8 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.pnlGerarDados.ResumeLayout(false);
             this.pnlGerarDados.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -218,11 +234,12 @@
         private System.Windows.Forms.Panel pnlGerarDados;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtQtdRequisitos;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtQtdPatrocinadores;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox txtQtdRelease;
+        private System.Windows.Forms.Label label5;
     }
 }

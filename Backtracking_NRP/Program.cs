@@ -91,10 +91,9 @@ namespace Backtracking_NRP
         }
         #endregion
 
-        #region CRIA UMA LISTA DE REQUISITOS
-        public List<Requisito> CriarListadeRequisitos(int vl_max_custo_req)
+        #region GET TOTAL REQUISITOS
+        public long GetTotalRequisitos()
         {
-            List<Requisito> requisitos = new List<Requisito>();
             long totalRequisitos = 0;
 
             while (totalRequisitos == 0)
@@ -104,7 +103,32 @@ namespace Backtracking_NRP
                 try { totalRequisitos = Convert.ToInt32(Console.ReadLine()); }
                 catch (Exception) { totalRequisitos = 0; }
             }
+            return totalRequisitos;
+        }
+        #endregion
 
+        #region  GET TOTAL PATROCINADORES
+        public long GetTotalPatrocinadores()
+        {
+            long totalPatrocinadores = 0;
+
+            while (totalPatrocinadores == 0)
+            {
+                Console.WriteLine("Digite a quantidade de PATROCINADORES: ");
+
+                try { totalPatrocinadores = Convert.ToInt64(Console.ReadLine()); }
+                catch (Exception) { totalPatrocinadores = 0; }
+            }
+
+            return totalPatrocinadores;
+        }
+
+        #endregion
+
+        #region CRIA UMA LISTA DE REQUISITOS
+        public List<Requisito> CriarListadeRequisitos(int vl_max_custo_req, long totalRequisitos)
+        {
+            List<Requisito> requisitos = new List<Requisito>();
             for (int i = 1; i <= totalRequisitos; i++)
             {
                 requisitos.Add(new Requisito(i, (new Random(DateTime.Now.Millisecond).Next(1, vl_max_custo_req))));
@@ -115,19 +139,9 @@ namespace Backtracking_NRP
         #endregion
 
         #region CRIA UMA LISTA DE PATROCINADORES
-        public List<Patrocinador> CriarListaPatrocinadores(List<Requisito> requisitos, int vl_max_peso_patr, int vl_max_interesse)
+        public List<Patrocinador> CriarListaPatrocinadores(List<Requisito> requisitos, int vl_max_peso_patr, int vl_max_interesse, long totalPatrocinadores)
         {
             List<Patrocinador> patrocinadores = new List<Patrocinador>();
-
-            long totalPatrocinadores = 0;
-
-            while (totalPatrocinadores == 0)
-            {
-                Console.WriteLine("Digite a quantidade de PATROCINADORES: ");
-
-                try { totalPatrocinadores = Convert.ToInt64(Console.ReadLine()); }
-                catch (Exception) { totalPatrocinadores = 0; }
-            }
 
             for (int i = 1; i <= totalPatrocinadores; i++)
             {
@@ -186,8 +200,8 @@ namespace Backtracking_NRP
             int vl_max_peso_patr = new Program().GetVlMaxPesoPatro();
 
             //LISTAS DE REQUISITOS E PATROCINADORES
-            List<Requisito> requisitos = new Program().CriarListadeRequisitos(vl_max_custo_req);
-            List<Patrocinador> patrocinadores = new Program().CriarListaPatrocinadores(requisitos, vl_max_peso_patr, vl_max_interesse_req).OrderByDescending(x => x.peso).ToList();
+            List<Requisito> requisitos = new Program().CriarListadeRequisitos(vl_max_custo_req, new Program().GetTotalRequisitos());
+            List<Patrocinador> patrocinadores = new Program().CriarListaPatrocinadores(requisitos, vl_max_peso_patr, vl_max_interesse_req, new Program().GetTotalPatrocinadores()).OrderByDescending(x => x.peso).ToList();
 
             #region CUSTO DA RELEASE
             long custo_release = 0;
@@ -285,7 +299,7 @@ namespace Backtracking_NRP
                                 {
                                     // Processa a solução, ou seja, retorna o requisito de maior prioridade
                                     r = new Program().ProcessaSolucao(p, p2);
-                                    
+
                                     // Remove o requisito que já foi atribuido a release das listas do patrocinador
                                     p.list_interesse_requi.RemoveAll(x => x.id_requisito == r.id_requisito);
                                     p2.list_interesse_requi.RemoveAll(x => x.id_requisito == r.id_requisito);
