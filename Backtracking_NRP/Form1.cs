@@ -31,6 +31,7 @@ namespace Backtracking_NRP
 
 
 
+            lblPrintRequisitos.Text = _program.PrintRequisitos(requisitos);
         }
     }
 }

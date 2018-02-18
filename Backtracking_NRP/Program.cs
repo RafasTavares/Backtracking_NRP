@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Backtracking_NRP
 {
@@ -98,7 +100,7 @@ namespace Backtracking_NRP
 
             while (totalRequisitos == 0)
             {
-                Console.WriteLine("Digite a quantidade de REQUISITOS: ");
+                Console.WriteLine("\nDigite a quantidade de REQUISITOS: ");
 
                 try { totalRequisitos = Convert.ToInt32(Console.ReadLine()); }
                 catch (Exception) { totalRequisitos = 0; }
@@ -114,7 +116,7 @@ namespace Backtracking_NRP
 
             while (totalPatrocinadores == 0)
             {
-                Console.WriteLine("Digite a quantidade de PATROCINADORES: ");
+                Console.WriteLine("\nDigite a quantidade de PATROCINADORES: ");
 
                 try { totalPatrocinadores = Convert.ToInt64(Console.ReadLine()); }
                 catch (Exception) { totalPatrocinadores = 0; }
@@ -129,10 +131,13 @@ namespace Backtracking_NRP
         public List<Requisito> CriarListadeRequisitos(int vl_max_custo_req, long totalRequisitos)
         {
             List<Requisito> requisitos = new List<Requisito>();
+            Console.Write("Gerando requisitos aleatórios.");
+
             for (int i = 1; i <= totalRequisitos; i++)
             {
                 requisitos.Add(new Requisito(i, (new Random(DateTime.Now.Millisecond).Next(1, vl_max_custo_req))));
                 System.Threading.Thread.Sleep(10);
+                Console.Write(".");
             }
             return requisitos;
         }
@@ -142,6 +147,7 @@ namespace Backtracking_NRP
         public List<Patrocinador> CriarListaPatrocinadores(List<Requisito> requisitos, int vl_max_peso_patr, int vl_max_interesse, long totalPatrocinadores)
         {
             List<Patrocinador> patrocinadores = new List<Patrocinador>();
+            Console.Write("Gerando patrocinadores aleatórios.");
 
             for (int i = 1; i <= totalPatrocinadores; i++)
             {
@@ -158,6 +164,7 @@ namespace Backtracking_NRP
 
                 patrocinadores.Add(new Patrocinador(i, (new Random(DateTime.Now.Millisecond).Next(1, vl_max_peso_patr)), new_requisitos.OrderByDescending(p => p.valor_interesse).ToList()));
                 System.Threading.Thread.Sleep(1);
+                Console.Write(".");
             }
 
             return patrocinadores;
@@ -165,11 +172,13 @@ namespace Backtracking_NRP
         #endregion
 
         #region PRINT REQUISITOS
-        public void PrintRequisitos(List<Requisito> requisitos)
+        public string PrintRequisitos(List<Requisito> requisitos)
         {
-            Console.WriteLine("     REQUISITOS");
+            String printRequisitos = "     REQUISITOS";
             foreach (Requisito r in requisitos)
-                Console.WriteLine("         Id: " + r.id_requisito + " - Custo: " + r.custo + ((r.valor_interesse > 0) ? " - Valor de interesse: " + r.valor_interesse : ""));
+                printRequisitos = printRequisitos + "\n         Id: " + r.id_requisito + " - Custo: " + r.custo + ((r.valor_interesse > 0) ? " - Valor de interesse: " + r.valor_interesse : "");
+
+            return printRequisitos;
         }
         #endregion
 
@@ -193,85 +202,102 @@ namespace Backtracking_NRP
         #region MAIN
         public static void Main(string[] args)
         {
+            Console.WriteLine("Se deseja continuar pela parte visual digite 1, senão digite 0: ");
 
-            // VALORES MAX RANDOM
-            int vl_max_interesse_req = new Program().GetVlMaxInteresseReq();
-            int vl_max_custo_req = new Program().GetVlMaxCustoReq();
-            int vl_max_peso_patr = new Program().GetVlMaxPesoPatro();
-
-            //LISTAS DE REQUISITOS E PATROCINADORES
-            List<Requisito> requisitos = new Program().CriarListadeRequisitos(vl_max_custo_req, new Program().GetTotalRequisitos());
-            List<Patrocinador> patrocinadores = new Program().CriarListaPatrocinadores(requisitos, vl_max_peso_patr, vl_max_interesse_req, new Program().GetTotalPatrocinadores()).OrderByDescending(x => x.peso).ToList();
-
-            #region CUSTO DA RELEASE
-            long custo_release = 0;
-            while (custo_release == 0)
+            if (Convert.ToInt32(Console.ReadLine()) == 1)
             {
-                Console.WriteLine("Digite o custo total da release: ");
-
-                try { custo_release = Convert.ToInt64(Console.ReadLine()); }
-                catch (Exception) { custo_release = 0; }
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Form1());
             }
-            #endregion
+            else
+            {
 
-            Console.WriteLine("---------------------------------------------");
-            Console.WriteLine("RECURSO DA SPRINT: " + custo_release);
+                // VALORES MAX RANDOM
+                int vl_max_interesse_req = new Program().GetVlMaxInteresseReq();
+                int vl_max_custo_req = new Program().GetVlMaxCustoReq();
+                int vl_max_peso_patr = new Program().GetVlMaxPesoPatro();
 
-            #region PRINT REQUISITOS
-            //new Program().PrintRequisitos(requisitos);
-            //Console.WriteLine("\n\nPressione qualquer tecla para continuar.....");
-            //Console.ReadKey();
-            #endregion
+                //LISTAS DE REQUISITOS E PATROCINADORES
+                List<Requisito> requisitos = new Program().CriarListadeRequisitos(vl_max_custo_req, new Program().GetTotalRequisitos());
+                List<Patrocinador> patrocinadores = new Program().CriarListaPatrocinadores(requisitos, vl_max_peso_patr, vl_max_interesse_req, new Program().GetTotalPatrocinadores()).OrderByDescending(x => x.peso).ToList();
 
-            #region PRINT PATROCINADORES
-            new Program().PrintPatrocinadores(patrocinadores);
-            Console.WriteLine("\n\nPressione qualquer tecla para GERAR a próxima release.....");
-            Console.ReadKey();
-            #endregion
+                #region CUSTO DA RELEASE
+                long custo_release = 0;
+                while (custo_release == 0)
+                {
+                    Console.WriteLine("\nDigite o custo total da release: ");
 
+                    try { custo_release = Convert.ToInt64(Console.ReadLine()); }
+                    catch (Exception) { custo_release = 0; }
+                }
+                #endregion
 
-            //List<Requisito> prox_release = 
-            new Program().Backtracking(custo_release, requisitos, patrocinadores);
+                Console.WriteLine("---------------------------------------------");
+                Console.WriteLine("RECURSO DA SPRINT: " + custo_release);
 
-            #region SET REQUISITO IN RELEASE
-            //long custo_atual = 0;
-            //foreach (Requisito r in prox_release)
-            //{
-            //    custo_atual = custo_atual + r.custo;
-            //}
-            #endregion
+                #region PRINT REQUISITOS
+                //new Program().PrintRequisitos(requisitos);
+                //Console.WriteLine("\n\nPressione qualquer tecla para continuar.....");
+                //Console.ReadKey();
+                #endregion
 
-            //Console.WriteLine("\n\nPressione qualquer tecla para VER a próxima release.....");
-            //Console.ReadKey();
+                #region PRINT PATROCINADORES
+                new Program().PrintPatrocinadores(patrocinadores);
+                Console.WriteLine("\n\nPressione qualquer tecla para GERAR a próxima release.....");
+                Console.ReadKey();
+                #endregion
 
-            #region PRINT REQUISITOS DA SPRINT
-            //Console.WriteLine("\n\n---------------------------------------------");
-            //Console.WriteLine("RECURSO DA SPRINT: " + custo_release + " Custo atual: " + custo_atual);
-            //Console.WriteLine("---------------------------------------------");
-            //Console.WriteLine("REQUISITOS PARA PRÓXIMA RELEASE");
-            //new Program().PrintRequisitos(prox_release);
-            #endregion
+                // Cria o StopWatch
+                Stopwatch sw = new Stopwatch();
+                // Começa a contar o tempo
+                sw.Start();
+                //List<Requisito> prox_release = 
+                new Program().Backtracking(custo_release, requisitos, patrocinadores);
+                sw.Stop();
 
-            #region SAVE CONSOLE
+                TimeSpan tempo = sw.Elapsed;
+                Console.WriteLine("Tempo de execução: " + tempo);
+                #region SET REQUISITO IN RELEASE
+                //long custo_atual = 0;
+                //foreach (Requisito r in prox_release)
+                //{
+                //    custo_atual = custo_atual + r.custo;
+                //}
+                #endregion
 
-            //Console.ReadKey();
+                //Console.WriteLine("\n\nPressione qualquer tecla para VER a próxima release.....");
+                //Console.ReadKey();
 
-            /*  bool? salvar = null;
-              Console.WriteLine("Deseja salvar os dados do console em arquivo? (1-SIM / 0-NÃO) : ");
-              while (salvar == null)
-              {
-                  //Console.WriteLine("1 = SIM / 0 = NÃO : ");
-                  try { salvar = Convert.ToBoolean(Console.ReadLine()); }
-                  catch (Exception) { salvar = null; }
-              }
+                #region PRINT REQUISITOS DA SPRINT
+                //Console.WriteLine("\n\n---------------------------------------------");
+                //Console.WriteLine("RECURSO DA SPRINT: " + custo_release + " Custo atual: " + custo_atual);
+                //Console.WriteLine("---------------------------------------------");
+                //Console.WriteLine("REQUISITOS PARA PRÓXIMA RELEASE");
+                //new Program().PrintRequisitos(prox_release);
+                #endregion
 
-              if (salvar == true)
-                  new Program().SaveConsoleInTxt();
-              #endregion
-      */
-            Console.WriteLine("\n\nPressione qualquer tecla para Finalizar.....");
-            Console.ReadKey();
-            #endregion
+                #region SAVE CONSOLE
+
+                //Console.ReadKey();
+
+                /*  bool? salvar = null;
+                  Console.WriteLine("Deseja salvar os dados do console em arquivo? (1-SIM / 0-NÃO) : ");
+                  while (salvar == null)
+                  {
+                      //Console.WriteLine("1 = SIM / 0 = NÃO : ");
+                      try { salvar = Convert.ToBoolean(Console.ReadLine()); }
+                      catch (Exception) { salvar = null; }
+                  }
+
+                  if (salvar == true)
+                      new Program().SaveConsoleInTxt();
+                  #endregion
+          */
+                Console.WriteLine("\n\nPressione qualquer tecla para Finalizar.....");
+                Console.ReadKey();
+                #endregion
+            }
         }
         #endregion
 
@@ -316,7 +342,7 @@ namespace Backtracking_NRP
                                 // próprio método passando os parametros sem o requisito que já está na release
                                 Console.Write(Backtracking(custo_release - custo_atual, requisitos, patrocinadores));
 
-                                return r.id_requisito.ToString();
+                                return r.id_requisito.ToString() + " - ";
                             }
                         }
                     }
@@ -325,8 +351,8 @@ namespace Backtracking_NRP
             }
             catch (Exception ex)
             {
-                return null;
-                Console.WriteLine("Error");
+                return "Error";
+               // Console.WriteLine("Error");
             }
         }
         #endregion

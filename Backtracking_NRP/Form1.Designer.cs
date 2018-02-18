@@ -38,13 +38,14 @@
             this.pnlGerarDados = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.txtQtdRelease = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtQtdRequisitos = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txtQtdPatrocinadores = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblPrintRequisitos = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.txtQtdRelease = new System.Windows.Forms.TextBox();
             this.pnlGerarDados.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -147,6 +148,13 @@
             this.label2.TabIndex = 10;
             this.label2.Text = "Qtd. Patrocinadores:";
             // 
+            // txtQtdRelease
+            // 
+            this.txtQtdRelease.Location = new System.Drawing.Point(500, 122);
+            this.txtQtdRelease.Name = "txtQtdRelease";
+            this.txtQtdRelease.Size = new System.Drawing.Size(53, 22);
+            this.txtQtdRelease.TabIndex = 9;
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -181,11 +189,20 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.lblPrintRequisitos);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Location = new System.Drawing.Point(13, 222);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(839, 163);
             this.panel1.TabIndex = 8;
+            // 
+            // lblPrintRequisitos
+            // 
+            this.lblPrintRequisitos.AutoSize = true;
+            this.lblPrintRequisitos.Location = new System.Drawing.Point(3, 49);
+            this.lblPrintRequisitos.Name = "lblPrintRequisitos";
+            this.lblPrintRequisitos.Size = new System.Drawing.Size(0, 17);
+            this.lblPrintRequisitos.TabIndex = 14;
             // 
             // label5
             // 
@@ -196,13 +213,6 @@
             this.label5.Size = new System.Drawing.Size(493, 20);
             this.label5.TabIndex = 13;
             this.label5.Text = "Informe os dados para geração automática dos requisítos";
-            // 
-            // txtQtdRelease
-            // 
-            this.txtQtdRelease.Location = new System.Drawing.Point(500, 122);
-            this.txtQtdRelease.Name = "txtQtdRelease";
-            this.txtQtdRelease.Size = new System.Drawing.Size(53, 22);
-            this.txtQtdRelease.TabIndex = 9;
             // 
             // Form1
             // 
@@ -241,5 +251,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox txtQtdRelease;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lblPrintRequisitos;
     }
 }
