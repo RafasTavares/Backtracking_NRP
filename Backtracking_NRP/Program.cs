@@ -15,14 +15,16 @@ namespace Backtracking_NRP
         public long id_requisito { get; set; }
         public long custo { get; set; }
         public long valor_interesse { get; set; }
+        public Requisito dependente { get; set; }
 
         //public List<Requisito> dependentes { get; set; }
 
-        public Requisito(long id, long custo, long interesse = 0)
+        public Requisito(long id, long custo, long interesse = 0, Requisito pDependente = null)
         {
             this.id_requisito = id;
             this.custo = custo;
             this.valor_interesse = interesse;
+            this.dependente = pDependente;
         }
     }
     #endregion
@@ -131,13 +133,24 @@ namespace Backtracking_NRP
         public List<Requisito> CriarListadeRequisitos(int vl_max_custo_req, long totalRequisitos)
         {
             List<Requisito> requisitos = new List<Requisito>();
+            long qtd_dependentes = (((totalRequisitos / 3) > 0) ? (totalRequisitos / 3) : (totalRequisitos / 2));
             Console.Write("Gerando requisitos aleatórios.");
 
             for (int i = 1; i <= totalRequisitos; i++)
             {
-                requisitos.Add(new Requisito(i, (new Random(DateTime.Now.Millisecond).Next(1, vl_max_custo_req))));
-                System.Threading.Thread.Sleep(10);
+                if (requisitos.Count >= qtd_dependentes && totalRequisitos > requisitos.Count + qtd_dependentes)
+                {
+                    requisitos.Add(new Requisito(i, (new Random(DateTime.Now.Millisecond).Next(1, vl_max_custo_req)), 0, requisitos.FirstOrDefault() ));
+                    System.Threading.Thread.Sleep(10);
+                    qtd_dependentes--;
+                }
+                else
+                {
+                    requisitos.Add(new Requisito(i, (new Random(DateTime.Now.Millisecond).Next(1, vl_max_custo_req))));
+                    System.Threading.Thread.Sleep(10);
+                }
                 Console.Write(".");
+
             }
             return requisitos;
         }
@@ -176,8 +189,12 @@ namespace Backtracking_NRP
         {
             String printRequisitos = "     REQUISITOS";
             foreach (Requisito r in requisitos)
+            {
                 printRequisitos = printRequisitos + "\n         Id: " + r.id_requisito + " - Custo: " + r.custo + ((r.valor_interesse > 0) ? " - Valor de interesse: " + r.valor_interesse : "");
+                if (r.dependente != null)
+                    printRequisitos = printRequisitos + "\n                 Id: " + r.dependente.id_requisito + " - Custo: " + r.dependente.custo + ((r.dependente.valor_interesse > 0) ? " - Valor de interesse: " + r.dependente.valor_interesse : "");
 
+            }
             return printRequisitos;
         }
         #endregion
@@ -237,13 +254,13 @@ namespace Backtracking_NRP
                 Console.WriteLine("RECURSO DA SPRINT: " + custo_release);
 
                 #region PRINT REQUISITOS
-                //new Program().PrintRequisitos(requisitos);
-                //Console.WriteLine("\n\nPressione qualquer tecla para continuar.....");
-                //Console.ReadKey();
+                Console.WriteLine(new Program().PrintRequisitos(requisitos));
+                Console.WriteLine("\n\nPressione qualquer tecla para continuar.....");
+                Console.ReadKey();
                 #endregion
 
                 #region PRINT PATROCINADORES
-                new Program().PrintPatrocinadores(patrocinadores);
+                //  new Program().PrintPatrocinadores(patrocinadores);
                 Console.WriteLine("\n\nPressione qualquer tecla para GERAR a próxima release.....");
                 Console.ReadKey();
                 #endregion
@@ -351,7 +368,7 @@ namespace Backtracking_NRP
             }
             catch (Exception ex)
             {
-                return "Error";
+                return "\n error" + ex.Message + "\n";
                 // Console.WriteLine("Error");
             }
         }
@@ -368,8 +385,7 @@ namespace Backtracking_NRP
         }
         #endregion
 
-
-
+        #region Sample - Fibonacci
         static int Fibonacci(int x) // A variável ‘x’ assume o valor da varíável ‘number’
         {
             // Aqui a lógica é simples, se ‘x’ for menor ou igual a 1 o valor 1 será retornado
@@ -381,6 +397,7 @@ namespace Backtracking_NRP
             // O método Fibonacci será executado até que o termo solicitado seja alcançado
             return Fibonacci(x - 1) + Fibonacci(x - 2);
         }
+        #endregion
 
         #region SaveConsoleInTxt
         public void SaveConsoleInTxt()
