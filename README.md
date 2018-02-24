@@ -1,5 +1,5 @@
 # Backtracking_NRP
-> Projeto para a disciplina de grafos. Estudo do problema NRP.
+> Estudo do problema NRP com Backtraking para a disciplina MATD74. 
 
 Desenvolvido por Rafael Tavares e Jenifer Vieira [@jenifvie](https://github.com/jenifvie)
 
