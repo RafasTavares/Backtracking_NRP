@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,12 +27,14 @@ namespace Backtracking_NRP
 
         private void button1_Click(object sender, EventArgs e)
         {
-      //      List<Requisito> requisitos = _program.CriarListadeRequisitos(Convert.ToInt32(txtCustoRequisito.Text), _program.GetTotalRequisitos(_console));
-      //      List<Patrocinador> patrocinadores = _program.CriarListaPatrocinadores(requisitos, Convert.ToInt32(txtPesoPatrocinador.Text), Convert.ToInt32(txtInteresseRequisito.Text), new Program().GetTotalPatrocinadores(requisitos.Count, _console));
+            StreamWriter _console = new StreamWriter("./log.txt", true, Encoding.ASCII);
+
+            List<Requisito> requisitos = _program.CriarListadeRequisitos(Convert.ToInt32(txtCustoRequisito.Text), _program.GetTotalRequisitos(_console), _console);
+                 List<Patrocinador> patrocinadores = _program.CriarListaPatrocinadores(requisitos, Convert.ToInt32(txtPesoPatrocinador.Text), Convert.ToInt32(txtInteresseRequisito.Text), new Program().GetTotalPatrocinadores(requisitos.Count, _console), _console);
 
 
 
-        //    lblPrintRequisitos.Text = _program.PrintRequisitos(requisitos);
+               lblPrintRequisitos.Text = _program.PrintRequisitos(requisitos, _console);
         }
     }
 }
