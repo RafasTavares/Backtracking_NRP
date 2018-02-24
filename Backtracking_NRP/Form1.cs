@@ -26,12 +26,12 @@ namespace Backtracking_NRP
 
         private void button1_Click(object sender, EventArgs e)
         {
-            List<Requisito> requisitos = _program.CriarListadeRequisitos(Convert.ToInt32(txtCustoRequisito.Text), _program.GetTotalRequisitos());
-            List<Patrocinador> patrocinadores = _program.CriarListaPatrocinadores(requisitos, Convert.ToInt32(txtPesoPatrocinador.Text), Convert.ToInt32(txtInteresseRequisito.Text), new Program().GetTotalPatrocinadores());
+      //      List<Requisito> requisitos = _program.CriarListadeRequisitos(Convert.ToInt32(txtCustoRequisito.Text), _program.GetTotalRequisitos(_console));
+      //      List<Patrocinador> patrocinadores = _program.CriarListaPatrocinadores(requisitos, Convert.ToInt32(txtPesoPatrocinador.Text), Convert.ToInt32(txtInteresseRequisito.Text), new Program().GetTotalPatrocinadores(requisitos.Count, _console));
 
 
 
-            lblPrintRequisitos.Text = _program.PrintRequisitos(requisitos);
+        //    lblPrintRequisitos.Text = _program.PrintRequisitos(requisitos);
         }
     }
 }
