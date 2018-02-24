@@ -4,9 +4,8 @@
 Desenvolvido por Rafael Tavares e [Jenifer Vieira](https://github.com/jenifvie)
 
 #### Executável do projeto 
-[>>>clique aqui para baixar<<<](https://github.com/RafasTavares/Backtracking_NRP/raw/master/Backtracking_NRP/bin/Debug/Backtracking_NRP.exe)
 > \Backtracking_NRP\bin\Debug\Backtracking_NRP.exe  
-
+[>>>clique aqui para baixar<<<](https://github.com/RafasTavares/Backtracking_NRP/raw/master/Backtracking_NRP/bin/Debug/Backtracking_NRP.exe)
 
 #### Logs dos testes realizados para o trabalho da disciplina 
 > \Backtracking_NRP\logs_teste_trabalho R_Quantidade_de_requisítos.txt
